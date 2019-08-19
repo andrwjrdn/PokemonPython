@@ -166,7 +166,84 @@ else:
 # RENDER POKEGYM
 DISPLAYSURFACE.blit(TEMPLE.SPRITE, (TEMPLE.X_POS*TILESIZE, TEMPLE.Y_POS*TILESIZE))
 
+# RENDER MIDNA
+    MIDNA.APPEARED = True
+    if MIDNA.APPEARED:
+        if PLAYER.TRANSFORM:
+            DISPLAYSURFACE.blit(MIDNA.SPRITE_POS, (PLAYER.PLAYER_POS[0]*TILESIZE + 20, PLAYER.PLAYER_POS[1] * TILESIZE + 35))
+        else:
+            DISPLAYSURFACE.blit(MIDNA.SPRITE_POS, (TEMPLE.X_POS*TILESIZE, TEMPLE.Y_POS*TILESIZE))
 
+    # RENDERING ARMED ITEMS WITH PLAYER SPRITE
+    if PLAYER.WEAPON:
+        DISPLAYSURFACE.blit(PLAYER.WEAPON.IMAGE_ARMED, (PLAYER.PLAYER_POS[0]*TILESIZE, PLAYER.PLAYER_POS[1]*TILESIZE))
+
+    # RENDER KOFFINGS AND PORTAL
+    for koffing in KOFFING_LIST:
+        if koffing.PORTAL_APPEAR:
+            DISPLAYSURFACE.blit(pygame.image.load(portal_images[koffing.PORTAL.FRAME]), (koffing.PORTAL.POS[0]*TILESIZE, koffing.PORTAL.POS[1]*TILESIZE))
+        if koffing.APPEAR:
+            DISPLAYSURFACE.blit(koffing.KOFFING, (koffing.POS[0]*TILESIZE, koffing.POS[1]*TILESIZE))
+
+    # RENDER ITEMS
+    for item in GAME_ITEMS:
+            if item.PLACED == True:
+                DISPLAYSURFACE.blit(item.IMAGE, (item.POS[0]*TILESIZE, item.POS[1]*TILESIZE))
+
+    # RENDER ORBS
+    for orb in orbs_list:
+        if orb.POS == MEWTWO.MEWTWO_POS and MEWTWO.VULNERABLE:
+            print('MEWTWO HEALTH', MEWTWO.HEALTH)
+            MEWTWO.HEALTH -= 10
+        for koffing in KOFFING_LIST:
+                if orb.POS == koffing.POS:
+                    koffing.APPEAR = False
+                    KOFFING_LIST.remove(koffing)
+                    orbs_list.remove(orb)
+        if orb.POS[0] > MAPWIDTH or orb.POS[0] < 0 or orb.POS[1] > MAPHEIGHT or orb.POS[1] < 0: 
+            orbs_list.remove(orb)
+
+        DISPLAYSURFACE.blit(orb.IMAGE, (orb.POS[0]*TILESIZE, orb.POS[1]*TILESIZE))
+
+    # RENDER PLAYER INVENTORY
+    INVENTORY_POSITION = 250
+    for item in PLAYER.PLAYER_INV:
+        DISPLAYSURFACE.blit(item.IMAGE, (INVENTORY_POSITION, MAPHEIGHT*TILESIZE+35))
+        INVENTORY_POSITION += 10 
+        INVENTORY_TEXT = INVFONT.render(item.NAME, True, WHITE, BLACK)
+        DISPLAYSURFACE.blit(INVENTORY_TEXT, (INVENTORY_POSITION, MAPHEIGHT*TILESIZE+15))
+        INVENTORY_POSITION += 100
+
+    # RENDER PLAYER HEALTH BAR
+    PLAYER_HEALTH_BAR_TEXT = HEALTHFONT.render('LINK HEALTH:', True, GREEN, BLACK)
+    DISPLAYSURFACE.blit(PLAYER_HEALTH_BAR_TEXT, (15, MAPHEIGHT*TILESIZE-500))
+    DISPLAYSURFACE.blit(HEALTHFONT.render(str(PLAYER.HEALTH), True, GREEN, BLACK), (225, MAPHEIGHT*TILESIZE - 500))
+
+    # RENDER MEWTWO HEALTH BAR
+    PLAYER_MANA_BAR_TEXT = HEALTHFONT.render('MEWTWO HEALTH:', True, RED, BLACK)
+    DISPLAYSURFACE.blit(PLAYER_MANA_BAR_TEXT, (650, MAPHEIGHT*TILESIZE-500))
+    DISPLAYSURFACE.blit(HEALTHFONT.render(str(MEWTWO.HEALTH), True, RED, BLACK), (900, MAPHEIGHT*TILESIZE-500))
+
+    # RENDER TREES
+    for tree in sorted(trees, key=lambda t: t.Y_POS):
+        DISPLAYSURFACE.blit(tree.SPRITE, (tree.X_POS, tree.Y_POS))
+
+    # RENDER MEWTWO AND PORTAL
+    DISPLAYSURFACE.blit(pygame.image.load(portal_images[PORTAL.FRAME]), (MEWTWO.MEWTWO_POS[0]*TILESIZE, MEWTWO.MEWTWO_POS[1]*TILESIZE))
+    DISPLAYSURFACE.blit(MEWTWO.MEWTWO, (MEWTWO.MEWTWO_POS[0]*TILESIZE, MEWTWO.MEWTWO_POS[1]*TILESIZE))
+
+    
+    pygame.display.update()
+
+    if MEWTWO.HEALTH <= 0:
+        GAME_OVER = True
+        print('GAME OVER, YOU WIN!')
+    
+    if PLAYER.HEALTH <= 0:
+        GAME_OVER = True
+        print('GAME OVER, YOU LOSE')
+
+# END OF GAME LOOP
 
 
 
