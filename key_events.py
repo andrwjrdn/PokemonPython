@@ -9,10 +9,10 @@ b_path = img_path + 'b'
 r_path = img_path + 'r'
 l_path = img_path + 'l'
 
-f_images = [f_path+str(f)+'.png' for f in range(7)]
-b_images = [b_path+str(b)+'.png' for b in range(7)]
-r_images = [r_path+str(r)+'.png' for r in range(7)] 
-l_images = [l_path+str(l)+'.png' for l in range(7)]
+f_images = [f_path+str(f)+'.png' for f in range(1)]
+b_images = [b_path+str(b)+'.png' for b in range(1)]
+r_images = [r_path+str(r)+'.png' for r in range(1)] 
+l_images = [l_path+str(l)+'.png' for l in range(1)]
 
 # IMAGES FOR RAICHU ANIMATED WALKING
 

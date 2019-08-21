@@ -14,10 +14,10 @@ GOLD = items.GOLD()
 SWORD = items.SWORD()
 SHIELD = items.SHIELD()
 BOW = items.BOW()
-PIKACHU = enemies.PIKACHU()
+MEWTWO = enemies.MEWTWO()
 PORTAL = enemies.PORTAL()
 TEMPLE = TEMPLE()
-MIDNA = heroes.MIDNA()
+CHANSEY = heroes.CHANSEY()
 
 # GROUPINGS OF RELATED GAME OBJECTS
 GAME_ITEMS = [WAND, SWORD, SHIELD]
@@ -49,12 +49,12 @@ GAME_OVER = False
 # GAME LOOP
 while not GAME_OVER:
 
-    PIKACHU_VULNERABLE_IF = [koffing for koffing in KOFFING_LIST if koffing.APPEAR == True]
+    MEWTWO_VULNERABLE_IF = [koffing for koffing in KOFFING_LIST if koffing.APPEAR == True]
 
-    if len(PIKACHU_VULNERABLE_IF) < 1:
-        PIKACHU.VULNERABLE = True
+    if len(MEWTWO_VULNERABLE_IF) < 1:
+        MEWTWO.VULNERABLE = True
     else:
-        PIKACHU.VULNERABLE = False
+        MEWTWO.VULNERABLE = False
 
     for event in pygame.event.get():
 
@@ -96,7 +96,7 @@ while not GAME_OVER:
         TIMED EVENTS
         """
 
-        # PIKACHU W/PORTAL MOVEMENT
+        # MEWTWO W/PORTAL MOVEMENT
         if (event.type == USEREVENT):
             if PORTAL.FRAME < 5:
                 PORTAL.FRAME += 1
@@ -104,7 +104,7 @@ while not GAME_OVER:
                 x = random.randint(1, 9)
                 y = random.randint(1, 9)
                 PORTAL.POS = [x, y]
-                PIKACHU.PIKACHU_POS = [x, y]
+                MEWTWO.MEWTWO_POS = [x, y]
                 PORTAL.FRAME = 1
         
         # KOFFING OBJECT GENERATOR 
@@ -174,13 +174,13 @@ while not GAME_OVER:
     # RENDER TEMPLE
     DISPLAYSURFACE.blit(TEMPLE.SPRITE, (TEMPLE.X_POS*TILESIZE, TEMPLE.Y_POS*TILESIZE))
 
-    # RENDER MIDNA
-    MIDNA.APPEARED = True
-    if MIDNA.APPEARED:
+    # RENDER CHANSEY
+    CHANSEY.APPEARED = True
+    if CHANSEY.APPEARED:
         if PLAYER.TRANSFORM:
-            DISPLAYSURFACE.blit(MIDNA.SPRITE_POS, (PLAYER.PLAYER_POS[0]*TILESIZE + 20, PLAYER.PLAYER_POS[1] * TILESIZE + 35))
+            DISPLAYSURFACE.blit(CHANSEY.SPRITE_POS, (PLAYER.PLAYER_POS[0]*TILESIZE + 20, PLAYER.PLAYER_POS[1] * TILESIZE + 35))
         else:
-            DISPLAYSURFACE.blit(MIDNA.SPRITE_POS, (TEMPLE.X_POS*TILESIZE, TEMPLE.Y_POS*TILESIZE))
+            DISPLAYSURFACE.blit(CHANSEY.SPRITE_POS, (TEMPLE.X_POS*TILESIZE, TEMPLE.Y_POS*TILESIZE))
 
     # RENDERING ARMED ITEMS WITH PLAYER SPRITE
     if PLAYER.WEAPON:
@@ -200,9 +200,9 @@ while not GAME_OVER:
 
     # RENDER ORBS
     for orb in orbs_list:
-        if orb.POS == PIKACHU.PIKACHU_POS and PIKACHU.VULNERABLE:
-            print('PIKACHU HEALTH', PIKACHU.HEALTH)
-            PIKACHU.HEALTH -= 10
+        if orb.POS == MEWTWO.MEWTWO_POS and MEWTWO.VULNERABLE:
+            print('MEWTWO HEALTH', MEWTWO.HEALTH)
+            MEWTWO.HEALTH -= 10
         for koffing in KOFFING_LIST:
                 if orb.POS == koffing.POS:
                     koffing.APPEAR = False
@@ -223,27 +223,27 @@ while not GAME_OVER:
         INVENTORY_POSITION += 100
 
     # RENDER PLAYER HEALTH BAR
-    PLAYER_HEALTH_BAR_TEXT = HEALTHFONT.render('PIKACHU HEALTH:', True, GREEN, BLACK)
+    PLAYER_HEALTH_BAR_TEXT = HEALTHFONT.render('PIKACHU HEALTH: ', True, GREEN, BLACK)
     DISPLAYSURFACE.blit(PLAYER_HEALTH_BAR_TEXT, (15, MAPHEIGHT*TILESIZE-500))
     DISPLAYSURFACE.blit(HEALTHFONT.render(str(PLAYER.HEALTH), True, GREEN, BLACK), (225, MAPHEIGHT*TILESIZE - 500))
 
-    # RENDER PIKACHU HEALTH BAR
-    PLAYER_MANA_BAR_TEXT = HEALTHFONT.render('PIKACHU HEALTH:', True, RED, BLACK)
+    # RENDER MEWTWO HEALTH BAR
+    PLAYER_MANA_BAR_TEXT = HEALTHFONT.render('MEWTWO HEALTH: ', True, RED, BLACK)
     DISPLAYSURFACE.blit(PLAYER_MANA_BAR_TEXT, (650, MAPHEIGHT*TILESIZE-500))
-    DISPLAYSURFACE.blit(HEALTHFONT.render(str(PIKACHU.HEALTH), True, RED, BLACK), (900, MAPHEIGHT*TILESIZE-500))
+    DISPLAYSURFACE.blit(HEALTHFONT.render(str(MEWTWO.HEALTH), True, RED, BLACK), (900, MAPHEIGHT*TILESIZE-500))
 
     # RENDER TREES
     for tree in sorted(trees, key=lambda t: t.Y_POS):
         DISPLAYSURFACE.blit(tree.SPRITE, (tree.X_POS, tree.Y_POS))
 
-    # RENDER PIKACHU AND PORTAL
-    DISPLAYSURFACE.blit(pygame.image.load(portal_images[PORTAL.FRAME]), (PIKACHU.PIKACHU_POS[0]*TILESIZE, PIKACHU.PIKACHU_POS[1]*TILESIZE))
-    DISPLAYSURFACE.blit(PIKACHU.PIKACHU, (PIKACHU.PIKACHU_POS[0]*TILESIZE, PIKACHU.PIKACHU_POS[1]*TILESIZE))
+    # RENDER MEWTWO AND PORTAL
+    DISPLAYSURFACE.blit(pygame.image.load(portal_images[PORTAL.FRAME]), (MEWTWO.MEWTWO_POS[0]*TILESIZE, MEWTWO.MEWTWO_POS[1]*TILESIZE))
+    DISPLAYSURFACE.blit(MEWTWO.MEWTWO, (MEWTWO.MEWTWO_POS[0]*TILESIZE, MEWTWO.MEWTWO_POS[1]*TILESIZE))
 
     
     pygame.display.update()
 
-    if PIKACHU.HEALTH <= 0:
+    if MEWTWO.HEALTH <= 0:
         GAME_OVER = True
         print('GAME OVER, YOU WIN!')
     
